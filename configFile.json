@@ -1,0 +1,14 @@
+{
+  "dev": {
+    "appConfig": {
+      "env": "ENV",
+      "apiUrl": "http://localhost/"
+    }
+  },
+  "prod": {
+    "appConfig": {
+      "env": "PROD",
+      "apiUrl": "https://api.production.com/"
+    }
+  }
+}

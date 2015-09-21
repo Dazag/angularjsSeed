@@ -1,0 +1,15 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "web project",
+  "dependencies": {
+    "gulp": "^3.9.0"
+  },
+  "devDependencies": {
+    "gulp-concat": "^2.6.0",
+    "gulp-inject": "^2.2.0",
+    "gulp-ng-config": "^1.2.1",
+    "gulp-sourcemaps": "^1.5.2",
+    "main-bower-files": "^2.9.0"
+  }
+}
