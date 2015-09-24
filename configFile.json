@@ -1,14 +1,16 @@
 {
   "dev": {
     "appConfig": {
-      "env": "ENV",
-      "apiUrl": "http://localhost/"
+      "env": "DEV",
+      "apiUrl": "http://devel.meetchpoint.com/api/",
+      "apiVersion":"v1/"
     }
   },
   "prod": {
     "appConfig": {
       "env": "PROD",
-      "apiUrl": "https://api.production.com/"
+      "apiUrl": "https://api.production.com/",
+      "apiVersion":"v1/"
     }
   }
 }

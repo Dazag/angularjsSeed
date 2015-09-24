@@ -1,2 +1,2 @@
-angular.module('eurekaApp', [])
-.constant('configVars', {"env":"ENV","apiUrl":"http://localhost/"});
+angular.module('App.config', [])
+.constant('appConfig', {"env":"DEV","apiUrl":"http://devel.meetchpoint.com/api/","apiVersion":"v1/"});

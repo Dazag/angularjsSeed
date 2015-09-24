@@ -15,13 +15,15 @@
     <!--<script src="bower_components/material-design-lite/material.min.js"></script>-->
 </head>
 
-<body ng-app="eurekaApp">
-
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+<body ng-app="App" class="container">
+<div class="row">
+    <div ui-view></div>
+</div>
 
 <!-- bower:js -->
 <script src="/bower_components/angular/angular.js"></script>
 <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="/bower_components/jquery/dist/jquery.js"></script>
 <!-- endinject -->
 
 <!-- inject:js -->
@@ -29,6 +31,7 @@
 <!-- endinject -->
 
 <!-- your app's js -->
-<script src="app/main.js"></script>
+<script src="app/configFile.js"></script>
+<script src="app/app.min.js"></script>
 </body>
 </html>

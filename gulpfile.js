@@ -6,7 +6,7 @@ var inject = require('gulp-inject');
 var sourcemaps = require('gulp-sourcemaps');
 
 var app = {
-    name: "eurekaApp",
+    name: "App",
     rootDir: "./app/",
     assetsDir: "./assets/",
     cssDir: "./assets/css/",
@@ -28,7 +28,7 @@ gulp.task('concat', function () {
 
 gulp.task('devConfig', function () {
     gulp.src(app.configFile)
-        .pipe(gulpNgConfig(app.name, {
+        .pipe(gulpNgConfig(app.name+'.config', {
             environment: 'dev'
         }))
         .pipe(gulp.dest(app.rootDir))
@@ -36,7 +36,7 @@ gulp.task('devConfig', function () {
 
 gulp.task('prodConfig', function () {
     gulp.src(app.configFile)
-        .pipe(gulpNgConfig(app.name, {
+        .pipe(gulpNgConfig(app.name+'.config', {
             environment: 'prod'
         }))
         .pipe(gulp.dest(app.rootDir))

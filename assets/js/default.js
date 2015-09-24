@@ -1,2 +1,0 @@
-//prueba
-var app = "";
