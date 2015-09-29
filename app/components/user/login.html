@@ -1,3 +1,12 @@
-<h1>Login view</h1>
-<a ng-click="UserCtrl.login()">Login</a>
-resultado: {{UserCtrl.data}}
+<div class="col-xs-offset-1 col-xs-10 col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4">
+    <form class="form-signin" novalidate>
+        <img src="">
+        <input type="email" ng-model="UserCtrl.form.email" class="form-control" placeholder="Email">
+        <input type="password" ng-model="UserCtrl.form.password" class="form-control" placeholder="Contraseña">
+        <label class="checkbox">
+            <input type="checkbox" ng-model="UserCtrl.form.remember"> Recuérdame </label>
+        <button class="btn btn-lg btn-primary btn-block" ng-click="UserCtrl.UserSrv.login(UserCtrl.form)">Iniciar sesión</button>
+        <div id="footer">
+            <a href="/">App</a></div>
+    </form>
+</div>

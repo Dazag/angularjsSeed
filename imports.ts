@@ -10,12 +10,13 @@
 // Interfaces
 
 // Controllers
-/// <reference path="app/components/user/Controller.ts"/>
+/// <reference path="app/components/user/UserCtrl.ts"/>
 
 // Directives
 
 // Services
-/// <reference path="app/services/Rest.ts"/>
-/// <reference path="app/components/user/Service.ts"/>
+/// <reference path="app/services/RestSrv.ts"/>
+/// <reference path="app/services/AuthSrv.ts"/>
+/// <reference path="app/components/user/UserSrv.ts"/>
 
 // Other

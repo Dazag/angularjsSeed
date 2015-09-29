@@ -1,4 +1,4 @@
-module App.services {
+module dashboard.services {
 
     export interface IAppConfig {
         env:string;
@@ -6,7 +6,7 @@ module App.services {
         apiVersion:string;
     }
 
-    export class Rest {
+    export class RestSrv {
 
         http:ng.IHttpService;
         q:ng.IQService;
@@ -31,6 +31,5 @@ module App.services {
             return this.http.post(this._apiUrl + endpoint, object, config);
         }
     }
-
-    App.Bootstrap.app.service('Rest', App.services.Rest);
 }
+dashboard.Bootstrap.angular.service('RestSrv', dashboard.services.RestSrv);

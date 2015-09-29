@@ -3,11 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <link rel="shortcut icon" href="http://www.embargosalobestia.com/wp-content/uploads/2015/04/favicon2.ico" type="image/x-icon">
     <title></title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
     <!-- inject:css -->
     <link rel="stylesheet" href="/assets/css/style.min.css">
     <!-- endinject -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
     <!-- bower:css -->
     <!-- endinject -->
@@ -15,13 +18,49 @@
     <!--<script src="bower_components/material-design-lite/material.min.js"></script>-->
 </head>
 
-<body ng-app="App" class="container">
-<div class="row">
+<body ng-app="EmbApp">
+
+<header>
+    <nav class="navbar navbar-default page-head" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><h2>App</h2></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" dropdown>
+                    <a class="dropdown-toggle" dropdown-toggle>
+                        UserName
+                        <button class="btn btn-sm"><span class="caret"></span></button>
+                    </a>
+                    <ul class="dropdown-menu" dropdown-menu>
+                        <li><a href="http://devel.meetchpoint.com/user/edit.html"><span
+                                class="glyphicon glyphicon-edit"></span> Editar Perfil</a></li>
+                        <li><a href="http://devel.meetchpoint.com/user/logout.html"><span
+                                class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="container-fluid">
     <div ui-view></div>
 </div>
 
+<footer>
+    <div class="container-fluid">
+    </div>
+</footer>
+
 <!-- bower:js -->
 <script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="/bower_components/jquery/dist/jquery.js"></script>
 <!-- endinject -->
