@@ -6,7 +6,7 @@ var inject = require('gulp-inject');
 var sourcemaps = require('gulp-sourcemaps');
 
 var app = {
-    name: "App",
+    name: "dashboard",
     rootDir: "./app/",
     assetsDir: "./assets/",
     cssDir: "./assets/css/",

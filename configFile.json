@@ -2,14 +2,14 @@
   "dev": {
     "appConfig": {
       "env": "DEV",
-      "apiUrl": "http://devel.meetchpoint.com/api/",
+      "apiUrl": "http://dev.emb.moelia.net/",
       "apiVersion":"v1/"
     }
   },
   "prod": {
     "appConfig": {
       "env": "PROD",
-      "apiUrl": "https://api.production.com/",
+      "apiUrl": "http://dev.emb.moelia.net/",
       "apiVersion":"v1/"
     }
   }
