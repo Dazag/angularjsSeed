@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="EmbApp">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <link rel="shortcut icon" href="http://www.embargosalobestia.com/wp-content/uploads/2015/04/favicon2.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="http://www.embargosalobestia.com/wp-content/uploads/2015/04/favicon2.ico"
+          type="image/x-icon">
     <title></title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -15,22 +16,22 @@
     <!-- bower:css -->
     <!-- endinject -->
 
-    <!--<script src="bower_components/material-design-lite/material.min.js"></script>-->
 </head>
 
-<body ng-app="EmbApp">
+<body ng-controller="MainCtrl as MainCtrl">
 
 <header>
     <nav class="navbar navbar-default page-head" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><h2>App</h2></a>
+                <a class="navbar-brand" ui-sref="home"><h2>App</h2></a>
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown" dropdown>
@@ -39,9 +40,7 @@
                         <button class="btn btn-sm"><span class="caret"></span></button>
                     </a>
                     <ul class="dropdown-menu" dropdown-menu>
-                        <li><a href="http://devel.meetchpoint.com/user/edit.html"><span
-                                class="glyphicon glyphicon-edit"></span> Editar Perfil</a></li>
-                        <li><a href="http://devel.meetchpoint.com/user/logout.html"><span
+                        <li ng-click="MainCtrl.UserSrv.logout()"><a href=""><span
                                 class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
                     </ul>
                 </li>
@@ -49,12 +48,33 @@
         </div>
     </nav>
 </header>
+
 <div class="container-fluid">
-    <div ui-view></div>
+    <div class="col-md-2" ng-show="MainCtrl.UserSrv.AuthSrv.user">
+        <div id="sidebar" class="card sidebar-nav">
+            <h5><i class="glyphicon glyphicon-home"></i>
+                <small><b>INICIO</b></small>
+            </h5>
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="">Tiendas</a></li>
+            </ul>
+            <h5><i class="glyphicon glyphicon-user"></i>
+                <small><b>USUARIOS</b></small>
+            </h5>
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="">Usuarios</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-10" ng-class="{'col-md-offset-1':!MainCtrl.UserSrv.AuthSrv.user}" id="main">
+        <div ui-view></div>
+    </div>
 </div>
 
 <footer>
     <div class="container-fluid">
+        <a href="http://www.ideatic.net" target="_blank">
+            © <img src="http://www.ideatic.net/favicon.ico"> ideatic {{1443725244000| date:'yyyy'}}</a>
     </div>
 </footer>
 

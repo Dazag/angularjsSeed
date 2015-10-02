@@ -1,10 +1,5 @@
 module dashboard.User {
 
-    export interface IUser {
-        name:string;
-        email:string;
-    }
-
     export interface ILoginForm {
         remember:boolean;
         password:string;
@@ -14,9 +9,7 @@ module dashboard.User {
     export class UserSrv extends dashboard.services.RestSrv {
 
         static $inject = ['$http', '$q', 'appConfig', '$rootScope', '$window', 'AuthSrv'];
-        private static _propertyName = 'userInfo';
 
-        user:IUser;
         window:ng.IWindowService;
         rootScope:ng.IRootScopeService;
         AuthSrv:dashboard.services.AuthSrv;
@@ -27,20 +20,15 @@ module dashboard.User {
             this.rootScope = $rootScope;
             this.window = $window;
             this.AuthSrv = AuthSrv;
-
-            if (this.window.sessionStorage[UserSrv._propertyName]) {
-                this.user = JSON.parse(this.window.sessionStorage[UserSrv._propertyName]);
-            }
-            else if (this.window.localStorage[UserSrv._propertyName]) {
-                this.user = JSON.parse(this.window.localStorage[UserSrv._propertyName]);
-            }
         }
 
         login(form:ILoginForm) {
-            this.AuthSrv.login(form.email, form.password, form.remember).then((data)=>console.log(data))
+            this.AuthSrv.login(form.email, form.password, form.remember);
         }
 
-
+        logout() {
+            this.AuthSrv.logout();
+        }
     }
 }
 dashboard.Bootstrap.angular.service('UserSrv', dashboard.User.UserSrv);

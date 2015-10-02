@@ -11,12 +11,13 @@
 
 // Controllers
 /// <reference path="app/components/user/UserCtrl.ts"/>
+/// <reference path="app/common/controllers/MainCtrl.ts"/>
 
 // Directives
 
 // Services
-/// <reference path="app/services/RestSrv.ts"/>
-/// <reference path="app/services/AuthSrv.ts"/>
+/// <reference path="app/common/services/RestSrv.ts"/>
+/// <reference path="app/common/services/AuthSrv.ts"/>
 /// <reference path="app/components/user/UserSrv.ts"/>
 
 // Other

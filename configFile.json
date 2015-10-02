@@ -9,7 +9,7 @@
   "prod": {
     "appConfig": {
       "env": "PROD",
-      "apiUrl": "http://dev.emb.moelia.net/",
+      "apiUrl": "https://api.production.com/",
       "apiVersion":"v1/"
     }
   }

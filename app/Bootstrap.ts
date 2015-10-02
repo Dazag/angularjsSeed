@@ -3,19 +3,15 @@ module dashboard {
     export class Bootstrap {
 
         static angular:ng.IModule;
-        static $inject:string[] = ['dashboard.config', 'ui.router'];
+        static $inject:string[] = ['dashboard.config', 'ui.router', 'ui.bootstrap'];
 
-        static run(){
+        static start() {
             Bootstrap.angular = angular.module('EmbApp', dashboard.Bootstrap.$inject);
-            Bootstrap.angular.config(dashboard.BootstrapConfig);
+            Bootstrap.angular.config(['$stateProvider', '$urlRouterProvider', Bootstrap.config]);
+            Bootstrap.angular.run(['$rootScope', '$state', 'AuthSrv', Bootstrap.run]);
         }
-    }
 
-    export class BootstrapConfig{
-
-        static $inject:string[] = ['$stateProvider', '$urlRouterProvider'];
-
-        constructor($stateProvider:ng.ui.IStateProvider, $urlRouterProvider:ng.ui.IUrlRouterProvider) {
+        static config($stateProvider:ng.ui.IStateProvider, $urlRouterProvider:ng.ui.IUrlRouterProvider) {
 
             // if none of the above states are matched, use this as the fallback
             $urlRouterProvider.otherwise('/');
@@ -32,8 +28,31 @@ module dashboard {
                     controllerAs: 'UserCtrl'
                 });
         }
+
+        static run($rootScope:ng.IRootScopeService, $state:ng.ui.IStateService, AuthSrv:dashboard.services.AuthSrv) {
+
+            $rootScope.$on('login',function(){
+                $state.go('home'); // go to login
+            });
+
+            $rootScope.$on('logout',function(){
+                $state.go('login'); // go to login
+            });
+
+            $rootScope.$on("$stateChangeStart", function (e, toState/* toParams, fromState, fromParams*/) {
+
+                if(toState.name === 'login'){
+                    return; // no need to redirect
+                }
+
+                if(!AuthSrv.isAuthenticated()) {
+                    e.preventDefault(); // stop current execution
+                    $state.go('login'); // go to login
+                }
+            });
+        }
     }
 }
 
 //run application
-dashboard.Bootstrap.run();
+dashboard.Bootstrap.start();

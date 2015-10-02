@@ -59,27 +59,26 @@ module dashboard.services {
 
             this.window[permanent ? 'localStorage' : 'sessionStorage'][AuthSrv._propertyName] = JSON.stringify(this.user);
         }
-    }
 
-    export class AuthConfig {
+        isAuthenticated() {
+            return typeof this.user != 'undefined' && this.user.token;
+        }
 
-        static $inject:string[] = ['$httpProvider'];
-
-        constructor($httpProvider:ng.IHttpProvider) {
+        static config($httpProvider:ng.IHttpProvider) {
             $httpProvider.interceptors.push(['$q', '$injector', function ($q, $injector) {
                 return {
                     request: function (httpConfig) {
-                        var $auth = $injector.get('AuthSrv');
-                        var token = $auth.user ? $auth.user.token : false;
+                        var AuthSrv = $injector.get('AuthSrv');
+                        var token = AuthSrv.user ? AuthSrv.user.token : false;
                         if (token) {
                             httpConfig.headers.Authorization = 'Bearer ' + token;
                         }
                         return httpConfig;
                     },
                     responseError: function (response) {
-                        var $auth = $injector.get('AuthSrv');
+                        var AuthSrv = $injector.get('AuthSrv');
                         if (response.status === 401) {//Sesión expirada
-                            $auth.logout();
+                            AuthSrv.logout();
                         }
                         return $q.reject(response);
                     }
@@ -91,4 +90,4 @@ module dashboard.services {
 
 dashboard.Bootstrap.angular
     .service('AuthSrv', dashboard.services.AuthSrv)
-    .config(['$httpProvider', dashboard.services.AuthConfig]);
+    .config(['$httpProvider', dashboard.services.AuthSrv.config]);

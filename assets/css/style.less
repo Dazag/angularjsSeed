@@ -3,6 +3,10 @@
 */
 @import "../../app/components/user/user.less";
 
+@darkgreen : #19303a;
+@white : #F8F8F8;
+
+@borderRadius : 4px;
 
 html {
   min-height: 100%;
@@ -21,18 +25,38 @@ header{
 }
 
 body{
-  margin-bottom: 155px;
+  margin-bottom: 55px;
   background-color: transparent;
 }
 
+.card{
+  border-radius: @borderRadius;
+  box-shadow: 0 2px 4px #ccc;
+  background-color: @white;
+  padding: 15px;
+  .card-title {
+    margin: -15px;
+    margin-bottom: 15px;
+    padding: 5px;
+    text-align: center;
+    color: @white;
+    border-top-left-radius: @borderRadius;
+    border-top-right-radius: @borderRadius;
+    background-color: @darkgreen;
+  }
+}
+
 footer {
-  height: 155px;
+  height: 55px;
   width: 100%;
   position: absolute;
   bottom: 0;
   text-align: center;
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #19303a;
-  color: #b9ca00;
+  background-color: @darkgreen;
+  a{
+    color: @white;
+    font-weight: bold;
+  }
 }
