@@ -1,2 +1,2 @@
-angular.module('dashboard.config', [])
-.constant('appConfig', {"env":"DEV","apiUrl":"http://dev.emb.moelia.net/","apiVersion":"v1/"});
+angular.module('project.config', [])
+.constant('appConfig', {"env":"DEV","apiUrl":"https://api.development.com/","apiVersion":"v1/"});

@@ -2,7 +2,7 @@
   "dev": {
     "appConfig": {
       "env": "DEV",
-      "apiUrl": "http://dev.emb.moelia.net/",
+      "apiUrl": "https://api.development.com/",
       "apiVersion":"v1/"
     }
   },

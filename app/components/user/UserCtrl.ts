@@ -1,18 +1,20 @@
-module dashboard.User {
+module project.User {
 
     export class UserCtrl {
 
-        static $inject = ['UserSrv'];
+        static $inject = ['UserSrv','AuthSrv'];
 
-        UserSrv:dashboard.User.UserSrv;
+        User:project.User.UserSrv;
+        Auth:project.services.AuthSrv;
 
         data:any;
-        form: dashboard.User.ILoginForm;
+        form: project.User.ILoginForm;
 
 
-        constructor(UserSrv:dashboard.User.UserSrv) {
-            this.UserSrv = UserSrv;
+        constructor(UserSrv:project.User.UserSrv,AuthSrv:project.services.AuthSrv) {
+            this.User = UserSrv;
+            this.Auth = AuthSrv;
         }
     }
 }
-dashboard.Bootstrap.angular.controller('UserCtrl', dashboard.User.UserCtrl);
+project.Bootstrap.angular.controller('UserCtrl', project.User.UserCtrl);

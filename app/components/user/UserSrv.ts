@@ -1,4 +1,4 @@
-module dashboard.User {
+module project.User {
 
     export interface ILoginForm {
         remember:boolean;
@@ -6,29 +6,122 @@ module dashboard.User {
         email:string;
     }
 
-    export class UserSrv extends dashboard.services.RestSrv {
+    export interface IUser {
+        id:number;
+        name:string;
+        surname:string;
+        phone:string;
+        src:string;
+        email:string;
+        group:string;
+        settings:IUserSettings;
+        address:IUserAddress[];
+        eventCount:number;
+        created:string;
+    }
 
-        static $inject = ['$http', '$q', 'appConfig', '$rootScope', '$window', 'AuthSrv'];
+    export interface IUserArray {
+        meta:{list:{total}}
+        data:IUser[]
+    }
+
+    export interface IUserSettings {
+        allCategories:number;
+        categories:Array<any>;
+        geofencing:number;
+        iBeacon:boolean;
+        push:boolean;
+    }
+
+    export interface IUserAddress {
+        id:number;
+        address1:string;
+        address2:string;
+        alias:string;
+        city:string;
+        company:string;
+        country:string;
+        name:string;
+        surname:string;
+        phone:string;
+        phone_mobile:string;
+        postcode:number;
+        state:string;
+        vat_number:string;
+    }
+
+    export class UserSrv extends project.services.RestSrv {
+
+        static $inject = ['$http', '$q', 'appConfig', '$window', 'AuthSrv'];
 
         window:ng.IWindowService;
-        rootScope:ng.IRootScopeService;
-        AuthSrv:dashboard.services.AuthSrv;
+        Auth:project.services.AuthSrv;
+        endpoint:string = 'users';
+        users:Array<any>;
+        user:IUser;
+        eventType:string;
 
-        constructor($http:ng.IHttpService, $q:ng.IQService, appConfig:dashboard.services.IAppConfig, $rootScope:ng.IRootScopeService, $window:ng.IWindowService, AuthSrv:dashboard.services.AuthSrv) {
+        //paginación
+        itemsPerPage:number = 8;
+        currentPage:number = 1;
+        totalItems:number = 0;
+
+        searchInput:string;
+
+        constructor($http:ng.IHttpService, $q:ng.IQService, appConfig:project.services.IAppConfig, $window:ng.IWindowService, AuthSrv:project.services.AuthSrv) {
             super($http, $q, appConfig);
 
-            this.rootScope = $rootScope;
+
             this.window = $window;
-            this.AuthSrv = AuthSrv;
+            this.Auth = AuthSrv;
+
+            this.Auth.errorMessage = '';
         }
 
         login(form:ILoginForm) {
-            this.AuthSrv.login(form.email, form.password, form.remember);
+            this.Auth.errorMessage = '';
+            this.Auth.login(form.email, form.password, form.remember);
         }
 
-        logout() {
-            this.AuthSrv.logout();
+        getAll(params:string, page:number = 1, limit:number = 8):ng.IHttpPromise<IUserArray> {
+            return this.get(this.endpoint, params + '&sort=-created&offset=' + (--page * limit), limit).success((response, status)=> {
+                this.users = response.data;
+            });
+        }
+
+        getOne(id:number, endpoint?:string, config:ng.IRequestShortcutConfig = {}):ng.IHttpPromise<IUser> {
+            return super.getOne(id, this.endpoint).success((response, status)=>this.user = response.data);
+        }
+
+        current():ng.IHttpPromise<any> {
+            return this.get('user');
+        }
+
+        deleteOne(id?:number) {
+            if (!this.window.confirm("¿Estás seguro que deseas eliminar este elemento?")) {
+                return;
+            }
+            this.remove(this.endpoint + '/' + (id ? id : this.user.id));
+        }
+
+        pageChanged(pageNumber?:number, resetSearch:boolean = false) {
+
+            var params:string = '';
+
+            if (resetSearch) {
+                this.searchInput = '';
+            }
+            if (this.eventType) {
+                params = '&event=' + this.eventType;
+            }
+            if (this.searchInput) {
+                params += '&q=' + this.searchInput;
+            }
+
+            this.getAll(params, pageNumber ? pageNumber : this.currentPage, this.itemsPerPage).success((response)=> {
+                this.totalItems = response.meta.list.total;
+            });
         }
     }
 }
-dashboard.Bootstrap.angular.service('UserSrv', dashboard.User.UserSrv);
+project.Bootstrap.angular.service('UserSrv', project.User.UserSrv);

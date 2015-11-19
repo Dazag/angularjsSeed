@@ -1,6 +1,6 @@
-module dashboard.services {
+module project.services {
 
-    export class AuthSrv extends dashboard.services.RestSrv {
+    export class AuthSrv extends project.services.RestSrv {
 
         static $inject:string[] = ['$http', '$q', 'appConfig', '$rootScope', '$window'];
         private static _propertyName = 'userInfo';
@@ -8,8 +8,9 @@ module dashboard.services {
         user:any;
         window:ng.IWindowService;
         rootScope:ng.IRootScopeService;
+        errorMessage:string;
 
-        constructor($http:ng.IHttpService, $q:ng.IQService, appConfig:dashboard.services.IAppConfig, $rootScope:ng.IRootScopeService, $window:ng.IWindowService) {
+        constructor($http:ng.IHttpService, $q:ng.IQService, appConfig:project.services.IAppConfig, $rootScope:ng.IRootScopeService, $window:ng.IWindowService) {
             super($http, $q, appConfig);
 
             this.rootScope = $rootScope;
@@ -30,15 +31,18 @@ module dashboard.services {
                 email: identity,
                 password: password
             }, {
-                ignoreErrors: true
+                params: {ignoreErrors: true}
             }).success(
                 (data, status)=> {
-                    this.user = data;
-                    this.save(remember);
-                    deferred.resolve(this.user);
-                    this.rootScope.$broadcast('login', this.user);
+                        this.user = data;
+                        this.save(remember);
+                        deferred.resolve(this.user);
+                        this.rootScope.$broadcast('login', this.user);
                 }).error(
-                (error)=>deferred.reject(error.userMessage)
+                (error)=> {
+                    this.errorMessage = error.userMessage;
+                    deferred.reject(error.userMessage)
+                }
             );
 
             return deferred.promise;
@@ -77,7 +81,7 @@ module dashboard.services {
                     },
                     responseError: function (response) {
                         var AuthSrv = $injector.get('AuthSrv');
-                        if (response.status === 401) {//Sesión expirada
+                        if (response.status === 401 || response.status === 403) {//Sesión expirada
                             AuthSrv.logout();
                         }
                         return $q.reject(response);
@@ -88,6 +92,6 @@ module dashboard.services {
     }
 }
 
-dashboard.Bootstrap.angular
-    .service('AuthSrv', dashboard.services.AuthSrv)
-    .config(['$httpProvider', dashboard.services.AuthSrv.config]);
+project.Bootstrap.angular
+    .service('AuthSrv', project.services.AuthSrv)
+    .config(['$httpProvider', project.services.AuthSrv.config]);
