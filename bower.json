@@ -4,8 +4,9 @@
   "devDependencies": {},
   "dependencies": {
     "angular": "~1.4.6",
-    "angular-bootstrap":  "~0.*",
+    "angular-bootstrap": "~0.*",
     "angular-ui-router": "~0.2.15",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "satellizer": "~0.13.1"
   }
 }

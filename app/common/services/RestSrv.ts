@@ -1,23 +1,15 @@
 module project.services {
 
-    export interface IAppConfig {
-        env:string;
-        apiUrl:string;
-        apiVersion:string;
-    }
-
     export class RestSrv {
 
         http:ng.IHttpService;
-        q:ng.IQService;
         appConfig:IAppConfig;
 
         private _apiUrl:string;
 
-        static $inject = ['$http', '$q', 'appConfig'];
+        static $inject = ['$http', 'appConfig'];
 
-        constructor($http:ng.IHttpService, $q:ng.IQService, appConfig:IAppConfig) {
-            this.q = $q;
+        constructor($http:ng.IHttpService, appConfig:IAppConfig) {
             this.http = $http;
             this.appConfig = appConfig;
             this._apiUrl = appConfig.apiUrl + appConfig.apiVersion

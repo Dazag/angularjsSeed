@@ -1,0 +1,36 @@
+<div class="col-xs-offset-1 col-xs-10 col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4">
+
+    <form class="form-signup" novalidate ng-submit="UserCtrl.signup(UserCtrl.signupForm)" name="form">
+        <img src="https://placeimg.com/65/65/nature/grayscale">
+
+        <input type="email" name="email" ng-model="UserCtrl.signupForm.email" class="form-control" placeholder="Email"
+               required>
+
+        <p ng-show="form.email.$invalid && !form.email.$pristine" class="help-block">Introduzca un email válido</p>
+
+        <input type="password" name="password" ng-model="UserCtrl.signupForm.password" ng-minlength="3"
+               class="form-control" placeholder="Contraseña" required>
+
+        <p ng-show="form.password.$error.minlength && !form.password.$pristine" class="help-block">La contraseña es
+            demasiado corta</p>
+
+        <input type="password" name="password" ng-model="UserCtrl.signupForm.confirmPassword" ng-minlength="3"
+               class="form-control" placeholder="Contraseña" required>
+
+        <p ng-show="form.password.$error.minlength && !form.password.$pristine" class="help-block">Las contraseñas no
+            coinciden</p>
+
+        <button type="submit" class="btn btn-lg btn-default btn-block" ng-disabled="form.$invalid">Registrate
+        </button>
+
+        <div id="footer">
+            <a ui-sref="home">App</a>
+            <br><br>
+
+            <div class="alert alert-danger" ng-show="UserCtrl.User.Auth.errorMessage">
+                {{UserCtrl.User.Auth.errorMessage}}
+            </div>
+        </div>
+    </form>
+
+</div>

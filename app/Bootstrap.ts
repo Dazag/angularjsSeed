@@ -1,17 +1,27 @@
 module project {
 
+
+    export interface IAppConfig {
+        env:string;
+        apiUrl:string;
+        apiVersion:string;
+        appName:string;
+    }
+
     export class Bootstrap {
 
         static angular:ng.IModule;
-        static $inject:string[] = ['project.config', 'ui.router', 'ui.bootstrap'];
+        static $inject:string[] = ['project.config', 'ui.router', 'ui.bootstrap', 'satellizer'];
 
         static start() {
             Bootstrap.angular = angular.module('EmbApp', project.Bootstrap.$inject);
-            Bootstrap.angular.config(['$stateProvider', '$urlRouterProvider', Bootstrap.config]);
+            Bootstrap.angular.config(['$stateProvider', '$urlRouterProvider', '$authProvider', 'appConfig', Bootstrap.config]);
             Bootstrap.angular.run(['$rootScope', '$state', 'AuthSrv', Bootstrap.run]);
         }
 
-        static config($stateProvider:ng.ui.IStateProvider, $urlRouterProvider:ng.ui.IUrlRouterProvider) {
+        static config($stateProvider:ng.ui.IStateProvider, $urlRouterProvider:ng.ui.IUrlRouterProvider, $authProvider:any, appConfig:project.IAppConfig) {
+
+            var apiURL:string = appConfig.apiUrl + appConfig.apiVersion;
 
             // if none of the above states are matched, use this as the fallback
             $urlRouterProvider.otherwise('/');
@@ -34,26 +44,67 @@ module project {
                     templateUrl: 'app/components/user/login.html',
                     controller: project.User.UserCtrl,
                     controllerAs: 'UserCtrl'
+                })
+                .state('signup', {
+                    url: '/signup',
+                    templateUrl: 'app/components/user/signup.html',
+                    controller: project.User.UserCtrl,
+                    controllerAs: 'UserCtrl'
                 });
+
+            /**
+             *  Satellizer default configuration
+             *
+             $authProvider.httpInterceptor = function() { return true; },
+             $authProvider.tokenRoot = null;
+             $authProvider.cordova = false;
+             $authProvider.baseUrl = '/';
+             $authProvider.tokenName = 'token';
+             $authProvider.tokenPrefix = 'satellizer';
+             $authProvider.authHeader = 'Authorization';
+             $authProvider.authToken = 'Bearer';
+             $authProvider.storageType = 'localStorage';
+             */
+
+            $authProvider.withCredentials = false;
+            $authProvider.loginUrl = apiURL + 'auth/login';
+            $authProvider.signupUrl = apiURL + 'auth/signup';
+            $authProvider.unlinkUrl = apiURL + 'auth/unlink/';
+
+            // Facebook
+            $authProvider.facebook({
+                clientId: '627986630561285',
+                url: apiURL + 'auth/facebook',
+                /*name: 'facebook',
+                 authorizationEndpoint: 'https://www.facebook.com/v2.5/dialog/oauth',
+                 redirectUri: window.location.origin + '/',
+                 requiredUrlParams: ['display', 'scope'],
+                 scope: ['email'],
+                 scopeDelimiter: ',',
+                 display: 'popup',
+                 type: '2.0',
+                 popupOptions: { width: 580, height: 400 }*/
+            });
+
         }
 
         static run($rootScope:ng.IRootScopeService, $state:ng.ui.IStateService, AuthSrv:project.services.AuthSrv) {
 
-            $rootScope.$on('login',function(){
+            $rootScope.$on('login', function () {
                 $state.go('home.test'); // go to login
             });
 
-            $rootScope.$on('logout',function(){
+            $rootScope.$on('logout', function () {
                 $state.go('login'); // go to login
             });
 
             $rootScope.$on("$stateChangeStart", function (e, toState/* toParams, fromState, fromParams*/) {
 
-                if(toState.name === 'login'){
+                if (toState.name === 'login') {
                     return; // no need to redirect
                 }
 
-                if(!AuthSrv.isAuthenticated()) {
+                if (!AuthSrv.satellizerAuth.isAuthenticated()) {
                     e.preventDefault(); // stop current execution
                     $state.go('login'); // go to login
                 }

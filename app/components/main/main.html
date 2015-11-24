@@ -17,7 +17,7 @@
                         <button class="btn btn-sm"><span class="caret"></span></button>
                     </a>
                     <ul class="uib-dropdown-menu" uib-dropdown-menu>
-                        <li ng-click="MainCtrl.User.Auth.logout()"><a href=""><span
+                        <li ng-click="MainCtrl.Auth.logout()"><a href=""><span
                                 class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
                     </ul>
                 </li>
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div class="col-md-2" ng-show="MainCtrl.User.Auth.user">
+    <div class="col-md-2" ng-show="MainCtrl.Auth.user">
         <div id="sidebar" class="card sidebar-nav">
             <h5><i class="glyphicon glyphicon-th-large"></i>
                 <small><b>MENÚ</b></small>
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div class="col-md-10" ng-class="{'col-md-offset-1':!MainCtrl.User.Auth.user}" id="main">
+    <div class="col-md-10" ng-class="{'col-md-offset-1':!MainCtrl.Auth.user}" id="main">
         <div ui-view></div>
     </div>
 

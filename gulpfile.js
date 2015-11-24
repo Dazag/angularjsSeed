@@ -11,7 +11,7 @@ var app = {
     assetsDir: "./assets/",
     cssDir: "./assets/css/",
     jsDir: "./assets/js/",
-    jsCmpntDir: ["./assets/angularTalk/*.min.js"],//array con assets sin bower o npm
+    jsCmpntDir: ["./assets/dump/*.min.js","./assets/dump/*.css"],//array con assets sin bower o npm
     configFile: "./configFile.json",
     bowerDir: "./bower_components/"
 };
@@ -45,7 +45,7 @@ gulp.task('prodConfig', function () {
 
 gulp.task('devIndex', ['devConfig'], function () {
     // It's not necessary to read the files (will speed up things), we're only after their paths:
-    var sources = gulp.src(app.jsCmpntDir.concat([app.cssDir + '*.min.css', app.jsDir + '*.min.js', app.rootDir + 'configFile.js', app.rootDir + 'app.js']), {read: false});
+    var sources = gulp.src(app.jsCmpntDir.concat([app.cssDir + '*.min.css', app.jsDir + '*.min.js', app.rootDir + 'configFile.min.js', app.rootDir + 'app.js']), {read: false});
 
     return gulp.src("./index.html")
         .pipe(inject(gulp.src(bowerFiles(), {read: false}), {name: 'bower'}))
@@ -55,7 +55,7 @@ gulp.task('devIndex', ['devConfig'], function () {
 
 gulp.task('prodIndex', ['concat', 'prodConfig'], function () {
     // It's not necessary to read the files (will speed up things), we're only after their paths:
-    var sources = gulp.src(app.jsCmpntDir.concat([app.assetsDir + 'all.min.css', app.assetsDir + 'all.min.js', app.rootDir + 'configFile.js', app.rootDir + 'app.min.js']), {read: false});
+    var sources = gulp.src(app.jsCmpntDir.concat([app.assetsDir + 'all.min.css', app.assetsDir + 'all.min.js', app.rootDir + 'configFile.min.js', app.rootDir + 'app.min.js']), {read: false});
 
     return gulp.src("./index.html")
         .pipe(inject(gulp.src(bowerFiles(), {read: false}), {name: 'bower'}))

@@ -6,6 +6,13 @@ module project.User {
         email:string;
     }
 
+    export interface ISignupForm{
+        name?:string;
+        confirmPassword:string;
+        password:string;
+        email:string;
+    }
+
     export interface IUser {
         id:number;
         name:string;
@@ -52,10 +59,9 @@ module project.User {
 
     export class UserSrv extends project.services.RestSrv {
 
-        static $inject = ['$http', '$q', 'appConfig', '$window', 'AuthSrv'];
+        static $inject = ['$http', 'appConfig', '$window'];
 
         window:ng.IWindowService;
-        Auth:project.services.AuthSrv;
         endpoint:string = 'users';
         users:Array<any>;
         user:IUser;
@@ -68,22 +74,13 @@ module project.User {
 
         searchInput:string;
 
-        constructor($http:ng.IHttpService, $q:ng.IQService, appConfig:project.services.IAppConfig, $window:ng.IWindowService, AuthSrv:project.services.AuthSrv) {
-            super($http, $q, appConfig);
-
+        constructor($http:ng.IHttpService, appConfig:project.IAppConfig, $window:ng.IWindowService) {
+            super($http, appConfig);
 
             this.window = $window;
-            this.Auth = AuthSrv;
-
-            this.Auth.errorMessage = '';
         }
 
-        login(form:ILoginForm) {
-            this.Auth.errorMessage = '';
-            this.Auth.login(form.email, form.password, form.remember);
-        }
-
-        getAll(params:string, page:number = 1, limit:number = 8):ng.IHttpPromise<IUserArray> {
+        getAll(params:string = '', page:number = 1, limit:number = 8):ng.IHttpPromise<IUserArray> {
             return this.get(this.endpoint, params + '&sort=-created&offset=' + (--page * limit), limit).success((response, status)=> {
                 this.users = response.data;
             });

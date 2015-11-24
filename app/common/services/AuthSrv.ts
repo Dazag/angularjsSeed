@@ -2,19 +2,22 @@ module project.services {
 
     export class AuthSrv extends project.services.RestSrv {
 
-        static $inject:string[] = ['$http', '$q', 'appConfig', '$rootScope', '$window'];
+        static $inject:string[] = ['$http', 'appConfig', '$rootScope', '$window', '$auth'];
         private static _propertyName = 'userInfo';
 
         user:any;
         window:ng.IWindowService;
         rootScope:ng.IRootScopeService;
+        satellizerAuth:any;
+
         errorMessage:string;
 
-        constructor($http:ng.IHttpService, $q:ng.IQService, appConfig:project.services.IAppConfig, $rootScope:ng.IRootScopeService, $window:ng.IWindowService) {
-            super($http, $q, appConfig);
+        constructor($http:ng.IHttpService, appConfig:project.IAppConfig, $rootScope:ng.IRootScopeService, $window:ng.IWindowService, $auth:any) {
+            super($http, appConfig);
 
             this.rootScope = $rootScope;
             this.window = $window;
+            this.satellizerAuth = $auth;
 
             if (this.window.sessionStorage[AuthSrv._propertyName]) {
                 this.user = JSON.parse(this.window.sessionStorage[AuthSrv._propertyName]);
@@ -24,33 +27,36 @@ module project.services {
             }
         }
 
-        login(identity:string, password:string, remember = false):ng.IPromise<any> {
-            var deferred = this.q.defer();
+        authenticate(provider:string):void {
+            this.satellizerAuth.authenticate(provider)
+                .then((response)=> {
+                    console.log(response);
+                    this.user = response.data;
+                    this.rootScope.$broadcast('login', this.user);
+                })
+                .catch((response)=> {
+                    this.errorMessage = response.data.userMessage;
+                });
+        }
 
-            this.post('auth/login', {
+        login(identity:string, password:string, remember = false):void {
+            this.errorMessage = '';
+
+            this.satellizerAuth.login({
                 email: identity,
                 password: password
-            }, {
-                params: {ignoreErrors: true}
-            }).success(
-                (data, status)=> {
-                        this.user = data;
-                        this.save(remember);
-                        deferred.resolve(this.user);
-                        this.rootScope.$broadcast('login', this.user);
-                }).error(
-                (error)=> {
-                    this.errorMessage = error.userMessage;
-                    deferred.reject(error.userMessage)
+            }, {paramas: {ignoreErrors: true}}).then((response, status) => {
+                this.user = response.data;
+                this.rootScope.$broadcast('login', this.user);
+            }).catch(
+                (response)=> {
+                    this.errorMessage = response.data.userMessage;
                 }
             );
-
-            return deferred.promise;
         }
 
         logout():void {
-            delete this.window.sessionStorage[AuthSrv._propertyName];
-            delete this.window.localStorage[AuthSrv._propertyName];
+            this.satellizerAuth.logout();
             this.user = null;
 
             this.rootScope.$broadcast('logout');
@@ -64,21 +70,9 @@ module project.services {
             this.window[permanent ? 'localStorage' : 'sessionStorage'][AuthSrv._propertyName] = JSON.stringify(this.user);
         }
 
-        isAuthenticated() {
-            return typeof this.user != 'undefined' && this.user.token;
-        }
-
-        static config($httpProvider:ng.IHttpProvider) {
+        static config($httpProvider:ng.IHttpProvider):void {
             $httpProvider.interceptors.push(['$q', '$injector', function ($q, $injector) {
                 return {
-                    request: function (httpConfig) {
-                        var AuthSrv = $injector.get('AuthSrv');
-                        var token = AuthSrv.user ? AuthSrv.user.token : false;
-                        if (token) {
-                            httpConfig.headers.Authorization = 'Bearer ' + token;
-                        }
-                        return httpConfig;
-                    },
                     responseError: function (response) {
                         var AuthSrv = $injector.get('AuthSrv');
                         if (response.status === 401 || response.status === 403) {//Sesión expirada
