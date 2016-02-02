@@ -12,19 +12,23 @@ module project {
 
         static angular:ng.IModule;
         static $inject:string[] = ['project.config', 'ui.router', 'ui.bootstrap', 'satellizer'];
+        static appSettings:IAppConfig;
 
         static start() {
             Bootstrap.angular = angular.module('EmbApp', project.Bootstrap.$inject);
+
+            //Setting up the application
             Bootstrap.angular.config(['$stateProvider', '$urlRouterProvider', '$authProvider', 'appConfig', Bootstrap.config]);
+            //Run the application
             Bootstrap.angular.run(['$rootScope', '$state', 'AuthSrv', Bootstrap.run]);
         }
 
         static config($stateProvider:ng.ui.IStateProvider, $urlRouterProvider:ng.ui.IUrlRouterProvider, $authProvider:any, appConfig:project.IAppConfig) {
 
-            var apiURL:string = appConfig.apiUrl + appConfig.apiVersion;
+            //we set up the settings to make appConfig global accessed
+            Bootstrap.appSettings = appConfig;
 
-            // if none of the above states are matched, use this as the fallback
-            $urlRouterProvider.otherwise('/');
+            var apiURL:string = Bootstrap.appSettings.apiUrl + Bootstrap.appSettings.apiVersion;
 
             $stateProvider
                 .state('home', {
@@ -52,6 +56,9 @@ module project {
                     controllerAs: 'UserCtrl'
                 });
 
+            // if none of the above states are matched, use this as the fallback
+            $urlRouterProvider.otherwise('/');
+
             /**
              *  Satellizer default configuration
              *
@@ -71,21 +78,15 @@ module project {
             $authProvider.signupUrl = apiURL + 'auth/signup';
             $authProvider.unlinkUrl = apiURL + 'auth/unlink/';
 
-            // Facebook
             $authProvider.facebook({
                 clientId: '627986630561285',
                 url: apiURL + 'auth/facebook',
-                /*name: 'facebook',
-                 authorizationEndpoint: 'https://www.facebook.com/v2.5/dialog/oauth',
-                 redirectUri: window.location.origin + '/',
-                 requiredUrlParams: ['display', 'scope'],
-                 scope: ['email'],
-                 scopeDelimiter: ',',
-                 display: 'popup',
-                 type: '2.0',
-                 popupOptions: { width: 580, height: 400 }*/
             });
 
+            $authProvider.google({
+                clientId: '536687204682-3khv7llmqld4i5ro4pe5u2p28hnblq53.apps.googleusercontent.com',
+                url: apiURL + 'auth/google',
+            });
         }
 
         static run($rootScope:ng.IRootScopeService, $state:ng.ui.IStateService, AuthSrv:project.services.AuthSrv) {
@@ -98,9 +99,9 @@ module project {
                 $state.go('login'); // go to login
             });
 
-            $rootScope.$on("$stateChangeStart", function (e, toState/* toParams, fromState, fromParams*/) {
+            $rootScope.$on('$stateChangeStart', function (e, toState/* toParams, fromState, fromParams*/) {
 
-                if (toState.name === 'login') {
+                if (toState.name === 'login' || toState.name === 'signup') {
                     return; // no need to redirect
                 }
 

@@ -10,6 +10,7 @@ module project.User {
         name?:string;
         confirmPassword:string;
         password:string;
+        sex:boolean;
         email:string;
     }
 
@@ -59,7 +60,7 @@ module project.User {
 
     export class UserSrv extends project.services.RestSrv {
 
-        static $inject = ['$http', 'appConfig', '$window'];
+        static $inject = ['$http', '$window'];
 
         window:ng.IWindowService;
         endpoint:string = 'users';
@@ -74,8 +75,8 @@ module project.User {
 
         searchInput:string;
 
-        constructor($http:ng.IHttpService, appConfig:project.IAppConfig, $window:ng.IWindowService) {
-            super($http, appConfig);
+        constructor($http:ng.IHttpService, $window:ng.IWindowService) {
+            super($http);
 
             this.window = $window;
         }

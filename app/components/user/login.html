@@ -14,11 +14,21 @@
         <p ng-show="form.password.$error.minlength && !form.password.$pristine" class="help-block">La contraseña es
             demasiado corta</p>
 
+        <label class="checkbox">
+            <input type="checkbox" name="remember" ng-model="UserCtrl.loginForm.remember"> Recuérdame
+        </label>
+
         <button type="submit" class="btn btn-lg btn-default btn-block" ng-disabled="form.$invalid">Iniciar sesión
         </button>
-        <button type="button" class="btn btn-lg btn-primary btn-block" ui-sref="signup">Sign up</button>
+
+        <a class="btn btn-lg btn-info btn-block" ui-sref="signup">Sign up</a>
+
         <button type="button" class="btn btn-lg btn-primary btn-block"
                 ng-click="UserCtrl.Auth.authenticate('facebook')">Sign in with Facebook
+        </button>
+
+        <button type="button" class="btn btn-lg btn-danger btn-block"
+                ng-click="UserCtrl.Auth.authenticate('google')">Sign in with Google
         </button>
 
         <div id="footer">

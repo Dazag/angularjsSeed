@@ -3,16 +3,14 @@ module project.services {
     export class RestSrv {
 
         http:ng.IHttpService;
-        appConfig:IAppConfig;
 
         private _apiUrl:string;
 
-        static $inject = ['$http', 'appConfig'];
+        static $inject = ['$http'];
 
-        constructor($http:ng.IHttpService, appConfig:IAppConfig) {
+        constructor($http:ng.IHttpService) {
             this.http = $http;
-            this.appConfig = appConfig;
-            this._apiUrl = appConfig.apiUrl + appConfig.apiVersion
+            this._apiUrl = Bootstrap.appSettings.apiUrl + Bootstrap.appSettings.apiVersion
         }
 
         get(endpoint:string, params?:string, limit:number = 10, config:ng.IRequestShortcutConfig = {}):ng.IHttpPromise<any> {
