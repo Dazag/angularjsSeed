@@ -23,7 +23,7 @@ module project {
         static appSettings:IAppConfig;
 
         static start() {
-            Bootstrap.angular = angular.module('EmbApp', project.Bootstrap.$inject);
+            Bootstrap.angular = angular.module('angularJSApp', project.Bootstrap.$inject);
 
             //Setting up the application
             Bootstrap.angular.config(['$stateProvider', '$urlRouterProvider', '$authProvider', 'appConfig', Bootstrap.config]);
