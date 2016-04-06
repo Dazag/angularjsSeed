@@ -23,11 +23,11 @@
 
         <a class="btn btn-lg btn-info btn-block" ui-sref="signup">Sign up</a>
 
-        <button type="button" class="btn btn-lg btn-primary btn-block"
+        <button type="button" class="btn btn-lg btn-primary btn-block" ng-show="UserCtrl.appSettings.facebook.clientId"
                 ng-click="UserCtrl.Auth.authenticate('facebook')">Sign in with Facebook
         </button>
 
-        <button type="button" class="btn btn-lg btn-danger btn-block"
+        <button type="button" class="btn btn-lg btn-danger btn-block" ng-show="UserCtrl.appSettings.google.clientId"
                 ng-click="UserCtrl.Auth.authenticate('google')">Sign in with Google
         </button>
 

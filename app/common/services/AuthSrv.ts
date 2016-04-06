@@ -1,5 +1,6 @@
 module project.services {
 
+    import UserSrv = project.User.UserSrv;
     export class AuthSrv extends project.services.RestSrv {
 
         static $inject:string[] = ['$http', '$rootScope', '$window', '$auth'];
@@ -34,35 +35,53 @@ module project.services {
          * @param provider
          */
         authenticate(provider:string):void {
-            this.satellizerAuth.authenticate(provider)
-                .then((response)=> {
-                    this.sessionData = response.data;
-                    this.save(true);//por defecto inicio de sesión permanente
-                    this.rootScope.$broadcast('login', response.data);
-                })
-                .catch((response)=> {
-                    this.errorMessage = response.data.userMessage;
-                });
+            this.errorMessage = '';//clear error message
+
+            this.satellizerAuth.authenticate(provider
+            ).then((response)=> {
+                this.sessionData = response.data;
+
+                this.save(true);//por defecto inicio de sesión permanente
+                this.rootScope.$broadcast('login', response.data);
+            }).catch((response)=> {
+                this.errorMessage = response.data.userMessage;
+            });
         }
 
         /**
          * Petición básica de login con usuario y contraseña
-         * @param identity
-         * @param password
-         * @param remember
+         * @param form
          */
-        login(identity:string, password:string, remember = false):void {
-            this.errorMessage = '';
+        login(form:project.User.ILoginForm):ng.IQResolveReject<any> {
+            this.errorMessage = '';//clear error message
 
-            this.satellizerAuth.login({
-                email: identity,
-                password: password
+            return this.satellizerAuth.login({
+                email: form.email,
+                password: form.password
             }, {
                 paramas: {ignoreErrors: true}
             }).then((response) => {
                 this.sessionData = response.data;
-                this.save(remember);
+                this.save(form.remember);
                 this.rootScope.$broadcast('login', response.data);
+            }).catch((response)=> {
+                this.errorMessage = response.data.userMessage;
+            });
+        }
+
+        signup(form:project.User.ISignupForm) {
+            this.errorMessage = '';//clear error message
+
+            return this.satellizerAuth.signup({
+                email: form.email,
+                password: form.password,
+            }).then((response)=> {
+                var loginForm:project.User.ILoginForm = {
+                    email: form.email,
+                    password: form.password, remember: false
+                };
+
+                this.login(loginForm);
             }).catch((response)=> {
                 this.errorMessage = response.data.userMessage;
             });

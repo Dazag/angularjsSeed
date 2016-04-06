@@ -6,6 +6,14 @@ module project {
         apiUrl:string;
         apiVersion:string;
         appName:string;
+        google:{
+            clientId:string,
+            url: string
+        };
+        facebook:{
+            clientId:string,
+            url: string
+        }
     }
 
     export class Bootstrap {
@@ -72,20 +80,20 @@ module project {
              $authProvider.authToken = 'Bearer';
              $authProvider.storageType = 'localStorage';
              */
-
+            
             $authProvider.withCredentials = false;
             $authProvider.loginUrl = apiURL + 'auth/login';
             $authProvider.signupUrl = apiURL + 'auth/signup';
             $authProvider.unlinkUrl = apiURL + 'auth/unlink/';
 
             $authProvider.facebook({
-                clientId: '627986630561285',
-                url: apiURL + 'auth/facebook',
+                clientId: Bootstrap.appSettings.facebook.clientId,
+                url: apiURL + Bootstrap.appSettings.facebook.url,
             });
 
             $authProvider.google({
-                clientId: '536687204682-3khv7llmqld4i5ro4pe5u2p28hnblq53.apps.googleusercontent.com',
-                url: apiURL + 'auth/google',
+                clientId: Bootstrap.appSettings.google.clientId,
+                url: apiURL + Bootstrap.appSettings.google.url,
             });
         }
 

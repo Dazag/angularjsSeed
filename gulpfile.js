@@ -69,4 +69,4 @@ gulp.task('watch', function () {
     gulp.watch(app.configFile, ['indexDev'])
 });
 
-gulp.task('default', ['watch', 'indexDev']);
+gulp.task('default', ['watch', 'devIndex']);

@@ -9,20 +9,21 @@ module project.User {
 
         loginForm:project.User.ILoginForm;
         signupForm:project.User.ISignupForm;
+        appSettings:project.IAppConfig;
 
 
         constructor(UserSrv:project.User.UserSrv, AuthSrv:project.services.AuthSrv) {
             this.User = UserSrv;
             this.Auth = AuthSrv;
+            this.appSettings = Bootstrap.appSettings;
         }
 
-        login(form:ILoginForm) {
-            this.Auth.login(form.email, form.password, form.remember);
+        login(loginForm:project.User.ILoginForm) {
+            this.Auth.login(loginForm);
         }
 
-        signup(form:project.User.ISignupForm) {
-            this.Auth.errorMessage = '';
-            this.Auth.satellizerAuth.signup({email: form.email, password: form.password});
+        signup(signupForm:project.User.ISignupForm) {
+            this.Auth.signup(signupForm);
         }
     }
 }

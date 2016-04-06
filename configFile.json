@@ -3,14 +3,30 @@
     "appConfig": {
       "env": "DEV",
       "apiUrl": "https://api.development.com/",
-      "apiVersion":"v1/"
+      "apiVersion":"v1/",
+      "google":{
+        "clientId": "",
+        "url": ""
+      },
+      "facebook":{
+        "clientId": "",
+        "url": ""
+      }
     }
   },
   "prod": {
     "appConfig": {
       "env": "PROD",
       "apiUrl": "https://api.production.com/",
-      "apiVersion":"v1/"
+      "apiVersion":"v1/",
+      "google":{
+        "clientId": "",
+        "url": ""
+      },
+      "facebook":{
+        "clientId": "",
+        "url": ""
+      }
     }
   }
 }
